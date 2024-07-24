@@ -1,0 +1,4 @@
+name = Add Tovar
+description = A simple module to add a product at admin/add_tovar.
+core = 7.x
+package = Custom

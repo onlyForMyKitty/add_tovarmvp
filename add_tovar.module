@@ -1,0 +1,127 @@
+<?php
+/**
+ * Implements hook_menu().
+ */
+function add_tovar_menu() {
+  $items = array();
+
+  // Страница с формой добавления товара.
+  $items['admin/add_tovar'] = array(
+    'title' => 'Add Product',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('add_tovar_form'),
+    'access arguments' => array('administer site configuration'),
+  );
+
+  return $items;
+}
+
+/**
+ * Форма для добавления товара.
+ */
+function add_tovar_form($form, &$form_state) {
+  $form['sku'] = array(
+    '#type' => 'textfield',
+    '#title' => t('SKU'),
+    '#required' => TRUE,
+    '#description' => t('Product SKU (must be an integer).'),
+  );
+
+  $form['price'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Price'),
+    '#required' => TRUE,
+    '#description' => t('Product price in USD.'),
+  );
+
+  $form['status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Status'),
+    '#description' => t('Check to publish the product.'),
+  );
+
+  $form['field_marka_ref'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Marka'),
+    '#required' => TRUE,
+  );
+
+  $form['field_model_ref'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Model'),
+    '#required' => TRUE,
+  );
+
+  $form['field_pokolenie_ref'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Pokolenie'),
+    '#required' => TRUE,
+  );
+
+  $form['field_year_ref'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Year'),
+    '#required' => TRUE,
+  );
+
+  $form['field_zapchast_ref'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Zapchast'),
+    '#required' => TRUE,
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Add Product'),
+  );
+
+  return $form;
+}
+
+/**
+ * Функция обработки отправки формы.
+ */
+function add_tovar_form_submit($form, &$form_state) {
+  // Сбор данных из формы.
+  $values = $form_state['values'];
+
+  // Создание нового объекта товара.
+  $product = new stdClass();
+  $product->type = 'zapchast';  // Тип узла 'zapchast'
+  node_object_prepare($product);
+
+  // Установка значений полей.
+  $product->title = $values['sku']; // Заголовок
+  $product->field_sku[LANGUAGE_NONE][0]['value'] = $values['sku']; // SKU
+  $product->commerce_price[LANGUAGE_NONE][0] = array(
+    'amount' => $values['price'] * 100, // Цена в центах
+    'currency_code' => 'USD',
+  );
+  $product->status = $values['status'] ? 1 : 0; // Статус публикации
+
+  // Получение tid для полей таксономии.
+  $product->field_marka_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_marka_ref']);
+  $product->field_model_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_model_ref']);
+  $product->field_pokolenie_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_pokolenie_ref']);
+  $product->field_year_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_year_ref']);
+  $product->field_zapchast_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_zapchast_ref']);
+
+  // Сохранение объекта товара.
+  node_save($product);
+
+  // Перенаправление на страницу с подтверждением или к другой странице.
+  drupal_set_message(t('Product @title has been added.', array('@title' => $product->title)));
+  $form_state['redirect'] = 'admin/add_tovar';
+}
+
+/**
+ * Функция для получения tid термина по имени.
+ */
+function get_term_tid_by_name($name) {
+  $term = taxonomy_get_term_by_name($name);
+  if ($term) {
+    $term = reset($term); // Получить первый термин из массива
+    return $term->tid;
+  }
+  return 0; // Возвращаем 0, если термин не найден
+}
