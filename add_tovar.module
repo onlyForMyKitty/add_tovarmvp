@@ -5,7 +5,7 @@
 function add_tovar_menu() {
   $items = array();
 
-  $items['admin/add_tovar'] = array(
+  $items['admin/add_tovarmvp'] = array(
     'title' => 'Add Product',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('add_tovar_form'),
@@ -15,80 +15,40 @@ function add_tovar_menu() {
   return $items;
 }
 
-/**
- * Форма для добавления товара.
- */
-function add_tovar_form($form, &$form_state) {
-  //название
-  $form['title'] = array(
-    '#type' => 'textfield',
-    '#title' => t('название'),
-    '#required' => TRUE,
-    '#description' => t('название запчасти'),
-  );
-  // артикул
-  $form['sku'] = array(
-    '#type' => 'textfield',
-    '#title' => t('артикул'),
-    '#required' => TRUE,
-    '#description' => t('Product SKU (must be an integer).'),
-  );
+function add_tovar_form($form, $form_state){
+
+// артикул
+$form['sku'] = array(
+  '#type' => 'textfield',
+  '#title' => t('артикул'),
+  '#required' => TRUE,
+  '#description' => t('Product SKU (must be an integer).'),
+);
 
 
-  // артикул комплекта
-  $form['field_kompl'] = array(
-    '#type' => 'textfield',
-    '#title' => t('артикул комплекта'),
-    '#description' => t('field_kompl'),
-  );
 
-  // Старая цена
-    // значение в центах
-  $form['field_old_price_amount'] = array(
-    '#type' => 'textfield',
-    '#title' => t('старая цена  (значение)'),
-    '#description' => t('в центах'),
-  );
-    //  значение валюты
-  $form['field_old_price_currency_code'] = array(
-    '#type' => 'select',
-    '#title' => t('старая цена (валюта)'),
-    '#options' => array(
-      'USD' => 'USD',
-      'EUR' => 'EUR',
-      'RUB' => 'RUB',
-      'BYN' => 'BYN',
-   ),
-    '#description' => t('выбрать валюту'),
-  );
-
-  // Цена
+// Цена
      //значение в центах
-  $form['commerce_price_amount'] = array(
-    '#type' => 'textfield',
-    '#title' => t('цена (значение)'),
-    '#required' => TRUE,
-    '#description' => t('в центах'),
-  );
-    //значение валюты
-  $form['commerce_price_currency_code'] = array(
-    '#type' => 'select',
-    '#title' => t('цена (валюта)'),
-    '#options' => array(
-      'USD' => 'USD',
-      'EUR' => 'EUR',
-      'RUB' => 'RUB',
-      'BYN' => 'BYN',
-    ),
-    '#required' => TRUE,
-    '#description' => t('выбрать'),
-  );
-  // статус публикации
-  $form['status'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Status'),
-    '#description' => t('Check to publish the product.'),
-  );
+     $form['commerce_price_amount'] = array(
+      '#type' => 'textfield',
+      '#title' => t('цена (значение)'),
+      '#required' => TRUE,
+      '#description' => t('в центах'),
+    );
+      //значение валюты
+    $form['commerce_price_currency_code'] = array(
+      '#type' => 'select',
+      '#title' => t('цена (валюта)'),
+      '#options' => array(
+        'USD' => 'USD',
+
+        'RUB' => 'RUB',
+        'BYN' => 'BYN',
+      ),
+      '#required' => TRUE,
+      '#description' => t('выбрать'),
+    );
+
   // марка
   $form['field_marka_ref'] = array(
     '#type' => 'textfield',
@@ -107,21 +67,11 @@ function add_tovar_form($form, &$form_state) {
     '#title' => t('поколение'),
     '#required' => TRUE,
   );
-  //кузов
-  $form['field_kuzov_ref'] = array(
-    '#type' => 'textfield',
-    '#title' => t('кузов'),
-  );
-  //год
+
+  // год
   $form['field_year_ref'] = array(
     '#type' => 'textfield',
     '#title' => t('год'),
-    '#required' => TRUE,
-  );
-  //двигатель
-  $form['field_dvigatel_ref'] = array(
-    '#type' => 'textfield',
-    '#title' => t('двигатель'),
     '#required' => TRUE,
   );
   // запчасть
@@ -131,234 +81,69 @@ function add_tovar_form($form, &$form_state) {
     '#required' => TRUE,
   );
 
-// запчасть для бампер бай
-$form['field_text_zapchast_for_bamber'] = array(
-  '#type' => 'textfield',
-  '#title' => t('запчасть для бампер бай'),
-);
-// оригинальный номер
-$form['field_original_number'] = array(
-  '#type' => 'textfield',
-  '#title' => t('оригинальный номер'),
-);
-// номер производителя
-$form['field_proizvoditel_number'] = array(
-  '#type' => 'textfield',
-  '#title' => t('номер производителя'),
-
-);
-// выгружать на авито
-$form['field_upload_to_avito'] = array(
-  '#type' => 'checkbox',
-  '#title' => t('выгружать на авито'),
-
-);
-// выгружать на дром
-$form['field_upload_to_drom'] = array(
-  '#type' => 'checkbox',
-  '#title' => t('выгружать на дром'),
-
-);
-// цена для дром
-   //значение в центах
-   $form['field_price_for_drom_amount'] = array(
-    '#type' => 'textfield',
-    '#title' => t('цена для дром(значение)'),
-    '#description' => t('в центах'),
-  );
-    //значение валюты
-  $form['field_price_for_drom_currency_code'] = array(
-    '#type' => 'select',
-    '#title' => t('цена для дром (валюта)'),
-    '#options' => array(
-      'USD' => 'USD',
-      'EUR' => 'EUR',
-      'RUB' => 'RUB',
-      'BYN' => 'BYN',
-    ),
-
-    '#description' => t('выбрать'),
+ // статус публикации
+  $form['status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Status'),
+    '#description' => t('Check to publish the product.'),
   );
 
-// топливо
-$form['field_topliovo'] = array(
-  '#type' => 'textfield',
-  '#title' => t('топливо'),
-);
-// объем
-$form['field_obiem'] = array(
-  '#type' => 'textfield',
-  '#title' => t('объем'),
-);
-// коробка
-$form['field_korobka'] = array(
-  '#type' => 'textfield',
-  '#title' => t('коробка'),
-);
-// тип кузова
-$form['field_kyzov_type'] = array(
-  '#type' => 'textfield',
-  '#title' => t('тип кузова'),
-);
-// описание товара
-$form['field_opisanie'] = array(
-  '#type' => 'textfield',
-  '#title' => t('описание товара'),
-);
-// адресное хранение
-$form['field_adress_hranenie'] = array(
-  '#type' => 'textfield',
-  '#title' => t('адресное хранение'),
-);
-// скрытое описание
-$form['field_opisanie_zapchasti'] = array(
-  '#type' => 'textfield',
-  '#title' => t('скрытое описание'),
-);
-// описание на авито
-$form['field_opisanie_avito'] = array(
-  '#type' => 'textfield',
-  '#title' => t('описание на авито'),
-);
-// бронь
-$form['field_reserv'] = array(
-  '#type' => 'checkbox',
-  '#title' => t('бронь'),
-);
-// // дата конца брони
-//   //дата
-//  $form['field_reserv_date_date'] = array(
-//   '#type' => 'textfield',
-//   '#title' => t('дата резервации YY/MM/DD'),
-// );
-//   //время
-//   $form['field_reserv_date_time'] = array(
-//     '#type' => 'textfield',
-//     '#title' => t('время резервации H:M:S'),
-//   );
-
-
-
-
-// сайт by
-$form['field_by'] = array(
-  '#type' => 'checkbox',
-  '#title' => t('залить на by'),
-);
-// сайт ru
-$form['field_ru'] = array(
-  '#type' => 'checkbox',
-  '#title' => t('залить на ru'),
-);
 // кнопка сохранения
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Add Product'),
-  );
+$form['submit'] = array(
+  '#type' => 'submit',
+  '#value' => t('Add Product'),
+);
 
-  return $form;
+return $form;
+
 }
+
 
 /**
  * Функция обработки отправки формы.
  */
 function add_tovar_form_submit($form, &$form_state) {
-  //достаем все данные из форм
   $values = $form_state['values'];
 
-  $product = new stdClass();
-  $product->type = 'zapchast';
-  node_object_prepare($product);
-  // обработка каждого поля
-  //тайтл
-  $product->title = $values['title'];
-  //артикул
+  $product = commerce_product_new('zapchast');
   $product->sku = $values['sku'];
-  // артикул комплекта
-  $product->field_kompl = $values['field_kompl'];
-  // старая цена
-  $product->field_old_price[LANGUAGE_NONE][0] = array(
-    'amount' => $values['field_old_price_amount'], // Значение в центах
-    'currency_code' => $values['field_old_price_currency_code'], // Код валюты
-  );
+
+
   // цена
-  $product->field_commerce_price[LANGUAGE_NONE][0] = array(
-    'amount' => $values['field_commerce_price_amount'], // Значение в центах
-    'currency_code' => $values['field_commerce_price_currency_code'], // Код валюты
-  );
-  // марка
-  $product->field_marka_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_marka_ref']);
-  // модель
-  $product->field_model_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_model_ref']);
-  // поколение
-  $product->field_pokolenie_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_pokolenie_ref']);
-  // год
-  $product->field_year_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_year_ref']);
-  // запчасть
-  $product->field_zapchast_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_zapchast_ref']);
-  // кузов
-  $product->field_kuzov_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_kuzov_ref']);
-  // двигатель
-  $product->field_dvigatel_ref[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_dvigatel_ref']);
-  // запчасть для бампер бай
-  $product->field_text_zapchast_for_bamber[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_text_zapchast_for_bamber']);
-  // оригинальный номер
-  $product->field_original_number = $values['field_original_number'];
-  // номер производителя
-  $product->field_proizvoditel_number = $values['field_proizvoditel_number'];
-  // выгружать на авито
-  $product->field_upload_to_avito = $values['field_upload_to_avito'] ? 1 : 0;
-  // выгружать на дром
-  $product->field_upload_to_drom = $values['field_upload_to_drom'] ? 1 : 0;
-  // цена для дром
-  $product->field_price_for_drom[LANGUAGE_NONE][0] = array(
-    'amount' => $values['field_price_for_drom_amount'], // Значение в центах
-    'currency_code' => $values['field_price_for_drom_currency_code'], // Код валюты
-  );
-  // топливо
-  $product->field_toplivo = $values['field_toplivo'];
-  // объем
-  $product->field_obiem = $values['field_obiem'];
-  // коробка
-  $product->field_korobka[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_korobka']);
-  // тип кузова
-  $product->field_kyzov_type[LANGUAGE_NONE][0]['tid'] = get_term_tid_by_name($values['field_kyzov_type']);
-  // описание товара
-  $product->field_opisanie = $values["field_opisanie"];
-  // адресное хранение
-  $product->field_adress_hranenie  = $values["field_adress_hranenie"];
-  // скрытое описание
-  $product->field_opisanie_zapchasti  = $values["field_opisanie_zapchasti"];
-  // описание на авито
-  $product->field_opisanie_avito  = $values["field_opisanie_avito"];
-  // бронь
-  $product->field_reserv  = $values['field_reserv'] ? 1 : 0;
-  // дата конца брони
-
-
-
-  // сайт by
-  $product->field_by  = $values['field_by'] ? 1 : 0;
-  // сайт ru
-  $product->field_ru = $values['field_ru'] ? 1 : 0;
-
-
-
-
-
   $product->commerce_price[LANGUAGE_NONE][0] = array(
-    'amount' => $values['price'] * 100,
-    'currency_code' => 'USD',
+    'amount' => $values['commerce_price_amount'], // Значение в центах
+    'currency_code' => $values['commerce_price_currency_code'], // Код валюты
   );
-  $product->status = $values['status'] ? 1 : 0;
+
+   // марка
+   $marka_tid = get_term_tid_by_name($values['field_marka_ref']);
+   drupal_set_message(t('TID марки: @tid', array('@tid' => $marka_tid)));
+   $product->field_marka_ref[LANGUAGE_NONE][0]['tid'] = $marka_tid;
+   // модель
+   $model_tid = get_term_tid_by_name($values['field_model_ref']);
+   drupal_set_message(t('TID модели: @tid', array('@tid' => $model_tid)));
+   $product->field_model_ref[LANGUAGE_NONE][0]['tid'] = $model_tid;
+   // поколение
+   $pokolenie_tid = get_term_tid_by_name($values['field_pokolenie_ref']);
+   drupal_set_message(t('TID поколения: @tid', array('@tid' => $pokolenie_tid)));
+   $product->field_pokolenie_ref[LANGUAGE_NONE][0]['tid'] = $pokolenie_tid;
+   // год
+   $year_tid = get_term_tid_by_name($values['field_year_ref']);
+   drupal_set_message(t('TID года: @tid', array('@tid' => $year_tid)));
+   $product->field_year_ref[LANGUAGE_NONE][0]['tid'] = $year_tid;
+   // запчасть
+   $zapchast_tid = get_term_tid_by_name($values['field_zapchast_ref']);
+   drupal_set_message(t('TID запчасти: @tid', array('@tid' => $zapchast_tid)));
+   $product->field_zapchast_ref[LANGUAGE_NONE][0]['tid'] = $zapchast_tid;
+
+   commerce_product_save($product);
 
 
-
-  node_save($product);
-
-  drupal_set_message(t('Product @title has been added.', array('@title' => $product->title)));
-  $form_state['redirect'] = 'admin/add_tovar';
+    // Сообщение о сохранении товара
+  drupal_set_message(t('Product with SKU @sku has been created.', array('@sku' => $product->sku)));
 }
+
+
 
 /**
  * Функция для получения tid термина по имени.
