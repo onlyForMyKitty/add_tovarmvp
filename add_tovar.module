@@ -138,9 +138,12 @@ function add_tovar_form_submit($form, &$form_state) {
 
    commerce_product_save($product);
 
+   if ($product->product_id) {
+    drupal_set_message(t('Product with SKU @sku has been created with product ID @pid.', array('@sku' => $product->sku, '@pid' => $product->product_id)));
+  } else {
+    drupal_set_message(t('Failed to create product with SKU @sku.', array('@sku' => $product->sku)), 'error');
+  }
 
-    // Сообщение о сохранении товара
-  drupal_set_message(t('Product with SKU @sku has been created.', array('@sku' => $product->sku)));
 }
 
 
